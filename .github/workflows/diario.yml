@@ -1,0 +1,34 @@
+name: Buscador de Vuelos AYCF
+
+on:
+  schedule:
+    - cron: '10 3 * * *'  # Todos los dias a las 0:10 AM hora Chile (UTC-3)
+  workflow_dispatch:        # Permite ejecutarlo manualmente tambien
+
+jobs:
+  buscar-vuelos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          pip install playwright beautifulsoup4
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Ejecutar buscador
+        env:
+          JETSMART_USER: ${{ secrets.JETSMART_USER }}
+          JETSMART_PASS: ${{ secrets.JETSMART_PASS }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          EMAIL_DESTINO: ${{ secrets.EMAIL_DESTINO }}
+        run: python buscador.py
