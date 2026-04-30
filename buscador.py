@@ -83,7 +83,7 @@ def buscar_destino(page, context, codigo, nombre, fecha_display, fecha_iso):
     page.on("response", capturar)
     page.goto("https://go.jetsmart.com/es-co/ja/subscriptions/spa/private-page/redemption")
     page.wait_for_selector("input[placeholder='Aeropuerto o Ciudad']")
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(15000)
 
     # Limpiar y llenar origen
     origen = page.locator("input[placeholder='Aeropuerto o Ciudad']").nth(0)
@@ -91,43 +91,43 @@ def buscar_destino(page, context, codigo, nombre, fecha_display, fecha_iso):
     origen.fill("Santiago")
     page.wait_for_selector("text=Santiago (SCL)")
     page.click("text=Santiago (SCL)")
-    page.wait_for_timeout(500)
+    page.wait_for_timeout(15000)
 
     # Limpiar y llenar destino
     destino = page.locator("input[placeholder='Aeropuerto o Ciudad']").nth(1)
     destino.click(click_count=3)
     destino.fill(nombre)
-    page.wait_for_timeout(1500)
+    page.wait_for_timeout(15000)
     try:
-        page.click(f"text={nombre}", timeout=5000)
+        page.click(f"text={nombre}", timeout=15000)
     except:
         page.remove_listener("response", capturar)
         return []
-    page.wait_for_timeout(500)
+    page.wait_for_timeout(15000)
 
     # Llenar fecha
     date_loc = page.locator("input[placeholder='DD/MM/YYYY']")
     date_loc.click(click_count=3)
     date_loc.click()
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(15000)
 
     dia = str(int(fecha_display.split("-")[0]))
     try:
-        page.click(f"text={dia}", timeout=5000)
+        page.click(f"text={dia}", timeout=15000)
     except:
         page.remove_listener("response", capturar)
         return []
-    page.wait_for_timeout(500)
+    page.wait_for_timeout(15000)
 
     # Esperar a que el botón esté habilitado antes de hacer click
     try:
-        page.wait_for_selector("button:has-text('Busca SMART'):not([disabled])", timeout=8000)
+        page.wait_for_selector("button:has-text('Busca SMART'):not([disabled])", timeout=15000)
     except:
         page.remove_listener("response", capturar)
         return []
 
     page.click("text=Busca SMART")
-    page.wait_for_timeout(4000)
+    page.wait_for_timeout(15000)
     page.remove_listener("response", capturar)
 
     for r in respuestas:
